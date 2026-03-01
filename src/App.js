@@ -240,7 +240,7 @@ export default function App() {
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               display: "flex", alignItems: "center", gap: "10px",
-              width: "100%", background: "none", border: "none",
+              width: "100%", border: "none",
               borderLeft: tab === t.id ? `2px solid ${C.accent}` : "2px solid transparent",
               background: tab === t.id ? "rgba(200,169,110,0.08)" : "none",
               color: tab === t.id ? C.accent : C.muted,
