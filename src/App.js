@@ -257,6 +257,16 @@ export default function App() {
             <div style={{ height: "100%", background: C.accent, width: `${tasks.length ? (doneTasks / tasks.length) * 100 : 0}%`, transition: "width 0.4s" }} />
           </div>
         </div>
+
+        {/* Branding */}
+        <div style={{ padding: "14px 20px", borderTop: `1px solid ${C.border}`, background: "rgba(200,169,110,0.04)" }}>
+          <div style={{ fontSize: "8px", letterSpacing: "2px", color: C.accent, textTransform: "uppercase", marginBottom: "6px" }}>Created by</div>
+          <div style={{ fontSize: "12px", color: C.text, fontWeight: "600", marginBottom: "5px" }}>纳吉日达</div>
+          <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
+          <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
+            ✉ yueyuecheng0702@163.com
+          </a>
+        </div>
       </div>
 
       {/* ── Content ── */}
