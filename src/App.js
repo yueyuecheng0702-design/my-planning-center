@@ -98,17 +98,7 @@ const defaultNotes = `# 灵感 & 想法
 · 对三条人生线的新想法
 · 任何你不想忘记的瞬间`;
 
-const AI_SYSTEM = `你是用户的专属人生规划顾问，基于斯坦福人生设计课（Designing Your Life）的框架，帮助用户探索人生方向、规划奥德赛计划。
 
-请根据用户的问题，给出专业、具体、有启发性的中文建议。
-
-核心原则：
-· 鼓励探索，而不是给出唯一答案
-· 帮助用户发现真正的价值观和渴望
-· 把抽象方向转化为具体可行动的下一步
-· 善用"原型测试"思维——小实验而非大赌注
-
-请用温暖、直接、有洞察力的语气回应。`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function EditText({ value, onChange, multiline, style, placeholder, className }) {
@@ -153,9 +143,6 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
-  const [chat, setChat] = useState([]);
-  const [chatInput, setChatInput] = useState("");
-  const [aiLoading, setAiLoading] = useState(false);
   const [newInspo, setNewInspo] = useState("");
   const chatRef = useRef();
 
@@ -175,7 +162,7 @@ useEffect(() => { if (loaded) save("upc-profile", profile); }, [profile, loaded]
 useEffect(() => { if (loaded) save("upc-odyssey", odyssey); }, [odyssey, loaded]);
 useEffect(() => { if (loaded) save("upc-tasks", tasks); }, [tasks, loaded]);
 useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
-  useEffect(() => { chatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chat]);
+  
 
   const plan = odyssey[activeOdyssey];
 
@@ -197,6 +184,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
   const delTask = id => setTasks(t => t.filter(x => x.id !== id));
   const updateTask = (id, f, v) => setTasks(t => t.map(x => x.id === id ? { ...x, [f]: v } : x));
 
+ 
 
   // ── Style tokens ─────────────────────────────────────────────────────────────
   const C = { bg: "#090b10", surface: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.07)", accent: "#c8a96e", text: "#ddd6c6", muted: "rgba(221,214,198,0.38)" };
@@ -207,7 +195,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
     { id: "odyssey", icon: "◎", label: "奥德赛" },
     { id: "tasks", icon: "◻", label: "任务" },
     { id: "notes", icon: "✎", label: "灵感" },
-    { id: "ai", icon: "✦", label: "AI顾问" },
+  
   ];
 
   const quickQ = ["现在最该做什么一件事？", "我的SOP核心叙事怎么写？", "推荐适合我的博士项目", "三条人生线现在该押注哪条？"];
@@ -535,14 +523,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           </div>
         )}
 
-        {/* ── AI ── */}
-        {tab === "ai" && (
-          <div>
-            <div style={{ marginBottom: "24px" }}>
-              <h2 style={{ margin: "0 0 4px", fontWeight: "400", fontSize: "20px" }}>✦ AI 顾问</h2>
-              <div style={{ fontSize: "12px", color: C.muted }}>基于你的完整背景和三条奥德赛人生线，随时咨询</div>
-            </div>
-
+    
             {/* Quick */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
               {quickQ.map((q, i) => (
@@ -553,25 +534,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
               ))}
             </div>
 
-            {/* Chat */}
-            <div style={{ ...card, minHeight: "360px", maxHeight: "440px", overflowY: "auto", marginBottom: "14px" }}>
-              {chat.length === 0 ? (
-                <div style={{ textAlign: "center", color: C.muted, paddingTop: "80px" }}>
-                  <div style={{ fontSize: "24px", color: C.accent, marginBottom: "10px" }}>✦</div>
-                  <div style={{ fontSize: "13px" }}>我了解你的全部背景和三条人生线，随时开始</div>
-                </div>
-              ) : (
-                chat.map((m, i) => (
-                  <div key={i} style={{ marginBottom: "18px", display: "flex", flexDirection: m.role === "user" ? "row-reverse" : "row", gap: "10px", alignItems: "flex-start" }}>
-                    <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: m.role === "user" ? "rgba(200,169,110,0.2)" : "rgba(107,203,119,0.15)", border: `1px solid ${m.role === "user" ? "rgba(200,169,110,0.3)" : "rgba(107,203,119,0.25)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", color: m.role === "user" ? C.accent : "#6bcb77" }}>
-                      {m.role === "user" ? "我" : "AI"}
-                    </div>
-                    <div style={{ background: m.role === "user" ? "rgba(200,169,110,0.08)" : C.surface, border: `1px solid ${m.role === "user" ? "rgba(200,169,110,0.15)" : C.border}`, borderRadius: "10px", padding: "12px 16px", fontSize: "13px", lineHeight: "1.85", maxWidth: "82%", whiteSpace: "pre-wrap", color: C.text }}>
-                      {m.content}
-                    </div>
-                  </div>
-                ))
-              )}
+        
               {aiLoading && (
                 <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                   <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "rgba(107,203,119,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", color: "#6bcb77" }}>AI</div>
@@ -581,21 +544,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
               <div ref={chatRef} />
             </div>
 
-            {/* Input */}
-            <div style={{ display: "flex", gap: "8px" }}>
-              <textarea
-                value={chatInput} onChange={e => setChatInput(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendAI(); } }}
-                placeholder="输入问题… (Enter 发送，Shift+Enter 换行)"
-                rows={2}
-                style={{ flex: 1, background: C.surface, border: `1px solid ${C.border}`, borderRadius: "8px", color: C.text, padding: "12px 16px", fontSize: "13px", fontFamily: "inherit", resize: "none", outline: "none", transition: "border-color 0.15s" }}
-                onFocus={e => e.target.style.borderColor = "rgba(200,169,110,0.4)"}
-                onBlur={e => e.target.style.borderColor = C.border}
-              />
-              <button onClick={sendAI} disabled={aiLoading || !chatInput.trim()} style={{ background: "rgba(200,169,110,0.12)", border: "1px solid rgba(200,169,110,0.3)", color: C.accent, borderRadius: "8px", padding: "0 18px", cursor: aiLoading || !chatInput.trim() ? "not-allowed" : "pointer", fontSize: "18px", opacity: aiLoading || !chatInput.trim() ? 0.35 : 1 }}>↑</button>
-            </div>
-          </div>
-        )}
+        
 
       </div>
     </div>
