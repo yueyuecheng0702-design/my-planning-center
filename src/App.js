@@ -1,11 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 
 // ── Storage ───────────────────────────────────────────────────────────────────
-async function load(key) {
-  try { const r = await window.storage.get(key); return r ? JSON.parse(r.value) : null; } catch { return null; }
+function load(key) {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
 }
-async function save(key, val) {
-  try { await window.storage.set(key, JSON.stringify(val)); } catch {}
+
+function save(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch {}
 }
 
 // ── Defaults ──────────────────────────────────────────────────────────────────
@@ -142,6 +150,7 @@ export default function App() {
   const [odyssey, setOdyssey] = useState(defaultOdyssey);
   const [tasks, setTasks] = useState(defaultTasks);
   const [notes, setNotes] = useState(defaultNotes);
+  const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
   const [chat, setChat] = useState([]);
@@ -151,19 +160,21 @@ export default function App() {
   const chatRef = useRef();
 
   // Load
-  useEffect(() => {
-    (async () => {
-      const p = await load("upc-profile"); if (p) setProfile(p);
-      const o = await load("upc-odyssey"); if (o) setOdyssey(o);
-      const t = await load("upc-tasks"); if (t) setTasks(t);
-      const n = await load("upc-notes"); if (n !== null) setNotes(n);
-    })();
-  }, []);
+useEffect(() => {
+  (async () => {
+    const p = await load("upc-profile"); if (p) setProfile(p);
+    const o = await load("upc-odyssey"); if (o) setOdyssey(o);
+    const t = await load("upc-tasks"); if (t) setTasks(t);
+    const n = await load("upc-notes"); if (n !== null) setNotes(n);
 
-  useEffect(() => { save("upc-profile", profile); }, [profile]);
-  useEffect(() => { save("upc-odyssey", odyssey); }, [odyssey]);
-  useEffect(() => { save("upc-tasks", tasks); }, [tasks]);
-  useEffect(() => { save("upc-notes", notes); }, [notes]);
+    setLoaded(true); // ⭐ 这一行是关键
+  })();
+}, []);
+
+useEffect(() => { if (loaded) save("upc-profile", profile); }, [profile, loaded]);
+useEffect(() => { if (loaded) save("upc-odyssey", odyssey); }, [odyssey, loaded]);
+useEffect(() => { if (loaded) save("upc-tasks", tasks); }, [tasks, loaded]);
+useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
   useEffect(() => { chatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chat]);
 
   const plan = odyssey[activeOdyssey];
