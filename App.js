@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 
 // ── Storage ───────────────────────────────────────────────────────────────────
-async function load(key) {
+function load(key) {
   try {
-    const r = localStorage.getItem(key);
-    return r ? JSON.parse(r) : null;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
   } catch {
     return null;
   }
 }
-async function save(key, val) {
+
+function save(key, val) {
   try {
     localStorage.setItem(key, JSON.stringify(val));
   } catch {}
