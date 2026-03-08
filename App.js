@@ -98,17 +98,7 @@ const defaultNotes = `# 灵感 & 想法
 · 对三条人生线的新想法
 · 任何你不想忘记的瞬间`;
 
-const AI_SYSTEM = `你是用户的专属人生规划顾问，基于斯坦福人生设计课（Designing Your Life）的框架，帮助用户探索人生方向、规划奥德赛计划。
 
-请根据用户的问题，给出专业、具体、有启发性的中文建议。
-
-核心原则：
-· 鼓励探索，而不是给出唯一答案
-· 帮助用户发现真正的价值观和渴望
-· 把抽象方向转化为具体可行动的下一步
-· 善用"原型测试"思维——小实验而非大赌注
-
-请用温暖、直接、有洞察力的语气回应。`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function EditText({ value, onChange, multiline, style, placeholder, className }) {
@@ -197,22 +187,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
   const delTask = id => setTasks(t => t.filter(x => x.id !== id));
   const updateTask = (id, f, v) => setTasks(t => t.map(x => x.id === id ? { ...x, [f]: v } : x));
 
-  // AI
-  const sendAI = async () => {
-    if (!chatInput.trim() || aiLoading) return;
-    const msg = chatInput.trim(); setChatInput("");
-    const newChat = [...chat, { role: "user", content: msg }];
-    setChat(newChat); setAiLoading(true);
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, system: AI_SYSTEM, messages: newChat }),
-      });
-      const data = await res.json();
-      setChat(c => [...c, { role: "assistant", content: data.content?.map(b => b.text || "").join("") || "出现错误，请重试。" }]);
-    } catch { setChat(c => [...c, { role: "assistant", content: "网络错误，请重试。" }]); }
-    setAiLoading(false);
-  };
+ 
 
   // ── Style tokens ─────────────────────────────────────────────────────────────
   const C = { bg: "#090b10", surface: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.07)", accent: "#c8a96e", text: "#ddd6c6", muted: "rgba(221,214,198,0.38)" };
@@ -223,7 +198,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
     { id: "odyssey", icon: "◎", label: "奥德赛" },
     { id: "tasks", icon: "◻", label: "任务" },
     { id: "notes", icon: "✎", label: "灵感" },
-    { id: "ai", icon: "✦", label: "AI顾问" },
+  
   ];
 
   const quickQ = ["现在最该做什么一件事？", "我的SOP核心叙事怎么写？", "推荐适合我的博士项目", "三条人生线现在该押注哪条？"];
@@ -572,21 +547,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
               <div ref={chatRef} />
             </div>
 
-            {/* Input */}
-            <div style={{ display: "flex", gap: "8px" }}>
-              <textarea
-                value={chatInput} onChange={e => setChatInput(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendAI(); } }}
-                placeholder="输入问题… (Enter 发送，Shift+Enter 换行)"
-                rows={2}
-                style={{ flex: 1, background: C.surface, border: `1px solid ${C.border}`, borderRadius: "8px", color: C.text, padding: "12px 16px", fontSize: "13px", fontFamily: "inherit", resize: "none", outline: "none", transition: "border-color 0.15s" }}
-                onFocus={e => e.target.style.borderColor = "rgba(200,169,110,0.4)"}
-                onBlur={e => e.target.style.borderColor = C.border}
-              />
-              <button onClick={sendAI} disabled={aiLoading || !chatInput.trim()} style={{ background: "rgba(200,169,110,0.12)", border: "1px solid rgba(200,169,110,0.3)", color: C.accent, borderRadius: "8px", padding: "0 18px", cursor: aiLoading || !chatInput.trim() ? "not-allowed" : "pointer", fontSize: "18px", opacity: aiLoading || !chatInput.trim() ? 0.35 : 1 }}>↑</button>
-            </div>
-          </div>
-        )}
+        
 
       </div>
     </div>
