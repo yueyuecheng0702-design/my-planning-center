@@ -551,14 +551,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           </div>
         )}
 
-        {/* ── AI ── */}
-        {tab === "ai" && (
-          <div>
-            <div style={{ marginBottom: "24px" }}>
-              <h2 style={{ margin: "0 0 4px", fontWeight: "400", fontSize: "20px" }}>✦ AI 顾问</h2>
-              <div style={{ fontSize: "12px", color: C.muted }}>基于你的完整背景和三条奥德赛人生线，随时咨询</div>
-            </div>
-
+    
             {/* Quick */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
               {quickQ.map((q, i) => (
@@ -569,25 +562,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
               ))}
             </div>
 
-            {/* Chat */}
-            <div style={{ ...card, minHeight: "360px", maxHeight: "440px", overflowY: "auto", marginBottom: "14px" }}>
-              {chat.length === 0 ? (
-                <div style={{ textAlign: "center", color: C.muted, paddingTop: "80px" }}>
-                  <div style={{ fontSize: "24px", color: C.accent, marginBottom: "10px" }}>✦</div>
-                  <div style={{ fontSize: "13px" }}>我了解你的全部背景和三条人生线，随时开始</div>
-                </div>
-              ) : (
-                chat.map((m, i) => (
-                  <div key={i} style={{ marginBottom: "18px", display: "flex", flexDirection: m.role === "user" ? "row-reverse" : "row", gap: "10px", alignItems: "flex-start" }}>
-                    <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: m.role === "user" ? "rgba(200,169,110,0.2)" : "rgba(107,203,119,0.15)", border: `1px solid ${m.role === "user" ? "rgba(200,169,110,0.3)" : "rgba(107,203,119,0.25)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", color: m.role === "user" ? C.accent : "#6bcb77" }}>
-                      {m.role === "user" ? "我" : "AI"}
-                    </div>
-                    <div style={{ background: m.role === "user" ? "rgba(200,169,110,0.08)" : C.surface, border: `1px solid ${m.role === "user" ? "rgba(200,169,110,0.15)" : C.border}`, borderRadius: "10px", padding: "12px 16px", fontSize: "13px", lineHeight: "1.85", maxWidth: "82%", whiteSpace: "pre-wrap", color: C.text }}>
-                      {m.content}
-                    </div>
-                  </div>
-                ))
-              )}
+        
               {aiLoading && (
                 <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                   <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "rgba(107,203,119,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", color: "#6bcb77" }}>AI</div>
