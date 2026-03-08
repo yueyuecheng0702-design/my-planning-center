@@ -144,7 +144,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
   const [newInspo, setNewInspo] = useState("");
-  const chatRef = useRef();
+
 
   // Load
 useEffect(() => {
@@ -198,7 +198,7 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
   
   ];
 
-  const quickQ = ["现在最该做什么一件事？", "我的SOP核心叙事怎么写？", "推荐适合我的博士项目", "三条人生线现在该押注哪条？"];
+
 
   const doneTasks = tasks.filter(t => t.done).length;
 
@@ -523,8 +523,6 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           </div>
         )}
 
-    
- 
 
         
    
