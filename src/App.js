@@ -197,22 +197,6 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
   const delTask = id => setTasks(t => t.filter(x => x.id !== id));
   const updateTask = (id, f, v) => setTasks(t => t.map(x => x.id === id ? { ...x, [f]: v } : x));
 
-  // AI
-  const sendAI = async () => {
-    if (!chatInput.trim() || aiLoading) return;
-    const msg = chatInput.trim(); setChatInput("");
-    const newChat = [...chat, { role: "user", content: msg }];
-    setChat(newChat); setAiLoading(true);
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, system: AI_SYSTEM, messages: newChat }),
-      });
-      const data = await res.json();
-      setChat(c => [...c, { role: "assistant", content: data.content?.map(b => b.text || "").join("") || "出现错误，请重试。" }]);
-    } catch { setChat(c => [...c, { role: "assistant", content: "网络错误，请重试。" }]); }
-    setAiLoading(false);
-  };
 
   // ── Style tokens ─────────────────────────────────────────────────────────────
   const C = { bg: "#090b10", surface: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.07)", accent: "#c8a96e", text: "#ddd6c6", muted: "rgba(221,214,198,0.38)" };
