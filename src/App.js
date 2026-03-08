@@ -524,26 +524,10 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
         )}
 
     
-            {/* Quick */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
-              {quickQ.map((q, i) => (
-                <button key={i} onClick={() => setChatInput(q)} style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: "20px", color: C.muted, padding: "6px 14px", fontSize: "12px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(200,169,110,0.4)"; e.currentTarget.style.color = C.accent; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.muted; }}
-                >{q}</button>
-              ))}
-            </div>
+ 
 
         
-              {aiLoading && (
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                  <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "rgba(107,203,119,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", color: "#6bcb77" }}>AI</div>
-                  <div style={{ fontSize: "12px", color: C.muted }}>思考中…</div>
-                </div>
-              )}
-              <div ref={chatRef} />
-            </div>
-
+   
         
 
       </div>
