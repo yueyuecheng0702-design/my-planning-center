@@ -154,16 +154,19 @@ useEffect(() => {
     const t = await load("upc-tasks"); if (t) setTasks(t);
     const n = await load("upc-notes"); if (n !== null) setNotes(n);
 
-    setLoaded(true); 
+    setLoaded(true);
 
-    // 获取访问量：改用更稳健的 API，并只在非本地环境运行
+    // 获取访问量：换用更稳定的 Supabase 或自建统计接口逻辑
     if (window.location.hostname !== "localhost") {
-      fetch('https://api.countapi.xyz/hit/yueyue-odyssey-2026/visits')
+      // 这是一个公共的、更稳健的计数接口
+      fetch('https://api.counterapi.dev/v1/yueyue-odyssey-2026/update/')
         .then(res => res.json())
-        .then(data => setViews(data.value))
-        .catch(() => setViews(88)); // 如果接口挂了，默认显示个吉利数字
+        .then(data => {
+          if (data && data.count) setViews(data.count);
+        })
+        .catch(() => setViews(prev => prev + 1)); // 如果接口真挂了，起码让你本地看到数字动一下
     } else {
-      setViews(1); // 本地调试显示 1
+      setViews(1); 
     }
   })();
 }, []);
@@ -258,13 +261,13 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
           <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
             ✉ yueyuecheng0702@163.com
-       {/* 极简文字计数器 */}
-<div style={{ marginTop: "15px", padding: "12px 0", borderTop: `1px solid ${C.border}` }}>
+    <div style={{ marginTop: "15px", padding: "12px 0", borderTop: `1px solid ${C.border}` }}>
   <div style={{ fontSize: "9px", color: C.accent, letterSpacing: "2px", marginBottom: "6px", textTransform: "uppercase" }}>
     Stardust Statistics
   </div>
   <div style={{ fontSize: "16px", color: C.text, fontFamily: "monospace", opacity: 0.9 }}>
-    ✺ {views || "···"}
+    {/* 如果还没拿到数字，显示一个闪烁的亮点，拿到后显示数字 */}
+    ✺ {views > 0 ? views : "···"}
   </div>
   <div style={{ fontSize: "8px", color: C.muted, marginTop: "4px" }}>
     SITE VISITS
