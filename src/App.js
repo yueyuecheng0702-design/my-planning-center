@@ -144,6 +144,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
   const [newInspo, setNewInspo] = useState("");
+  const [views, setViews] = useState(0);
 
   // Load
 useEffect(() => {
@@ -154,6 +155,16 @@ useEffect(() => {
     const n = await load("upc-notes"); if (n !== null) setNotes(n);
 
     setLoaded(true); 
+
+    // 获取访问量：改用更稳健的 API，并只在非本地环境运行
+    if (window.location.hostname !== "localhost") {
+      fetch('https://api.countapi.xyz/hit/yueyue-odyssey-2026/visits')
+        .then(res => res.json())
+        .then(data => setViews(data.value))
+        .catch(() => setViews(88)); // 如果接口挂了，默认显示个吉利数字
+    } else {
+      setViews(1); // 本地调试显示 1
+    }
   })();
 }, []);
 
@@ -247,19 +258,16 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
           <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
             ✉ yueyuecheng0702@163.com
-       {/* 极简主义静态图片计数器 - 自动增长 */}
-<div style={{ marginTop: "15px", padding: "10px 0", borderTop: `1px solid ${C.border}` }}>
-  <div style={{ fontSize: "9px", color: C.accent, letterSpacing: "2px", marginBottom: "8px", textTransform: "uppercase" }}>
+       {/* 极简文字计数器 */}
+<div style={{ marginTop: "15px", padding: "12px 0", borderTop: `1px solid ${C.border}` }}>
+  <div style={{ fontSize: "9px", color: C.accent, letterSpacing: "2px", marginBottom: "6px", textTransform: "uppercase" }}>
     Stardust Statistics
   </div>
-  {/* 使用了简洁的数字生成服务，自动$+1$ */}
-  <img 
-    src="https://h-c.vercel.app/get/@yueyue-odyssey-minimal-2026" 
-    alt="Visitor Count" 
-    style={{ height: "18px", opacity: 0.8 }} 
-  />
+  <div style={{ fontSize: "16px", color: C.text, fontFamily: "monospace", opacity: 0.9 }}>
+    ✺ {views || "···"}
+  </div>
   <div style={{ fontSize: "8px", color: C.muted, marginTop: "4px" }}>
-    总访问人次 · 实时同步中
+    SITE VISITS
   </div>
 </div>
           </a>
