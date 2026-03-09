@@ -247,15 +247,16 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
           <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
             ✉ yueyuecheng0702@163.com
-             {/* 访客计数器 - 自动增长 */}
+       {/* 极简主义静态图片计数器 - 自动增长 */}
 <div style={{ marginTop: "15px", padding: "10px 0", borderTop: `1px solid ${C.border}` }}>
   <div style={{ fontSize: "9px", color: C.accent, letterSpacing: "2px", marginBottom: "8px", textTransform: "uppercase" }}>
     Stardust Statistics
   </div>
+  {/* 使用了简洁的数字生成服务，自动$+1$ */}
   <img 
-    src="https://count.getloli.com/get/@yueyue-odyssey-2026?theme=asoul" 
+    src="https://h-c.vercel.app/get/@yueyue-odyssey-minimal-2026" 
     alt="Visitor Count" 
-    style={{ height: "24px", opacity: 0.85, filter: "sepia(0.5) hue-rotate(10deg)" }} 
+    style={{ height: "18px", opacity: 0.8 }} 
   />
   <div style={{ fontSize: "8px", color: C.muted, marginTop: "4px" }}>
     总访问人次 · 实时同步中
