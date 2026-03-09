@@ -144,7 +144,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
   const [newInspo, setNewInspo] = useState("");
-
+  const [views, setViews] = useState(0);
 
   // Load
 useEffect(() => {
@@ -154,7 +154,11 @@ useEffect(() => {
     const t = await load("upc-tasks"); if (t) setTasks(t);
     const n = await load("upc-notes"); if (n !== null) setNotes(n);
 
-    setLoaded(true); // ⭐ 这一行是关键
+    setLoaded(true); 
+    fetch('https://api.countapi.xyz/hit/yueyue-odyssey/visits')
+      .then(res => res.json())
+      .then(data => setViews(data.value))
+      .catch(() => {}); 
   })();
 }, []);
 
@@ -248,6 +252,9 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
           <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
             ✉ yueyuecheng0702@163.com
+              <div style={{ fontSize: "9px", color: C.muted, marginTop: "12px", borderTop: `1px solid ${C.border}`, paddingTop: "8px" }}>
+  ✺ 访问次数：{views || "---"}
+</div>
           </a>
         </div>
       </div>
