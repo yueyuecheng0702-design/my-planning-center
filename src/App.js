@@ -144,7 +144,6 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [activeOdyssey, setActiveOdyssey] = useState(0);
   const [newInspo, setNewInspo] = useState("");
-  const [views, setViews] = useState(0);
 
   // Load
 useEffect(() => {
@@ -155,10 +154,6 @@ useEffect(() => {
     const n = await load("upc-notes"); if (n !== null) setNotes(n);
 
     setLoaded(true); 
-    fetch('https://api.countapi.xyz/hit/yueyue-odyssey/visits')
-      .then(res => res.json())
-      .then(data => setViews(data.value))
-      .catch(() => {}); 
   })();
 }, []);
 
@@ -252,8 +247,19 @@ useEffect(() => { if (loaded) save("upc-notes", notes); }, [notes, loaded]);
           <div style={{ fontSize: "9px", color: C.muted, marginBottom: "4px" }}>📕 小红书 @纳吉日达</div>
           <a href="mailto:yueyuecheng0702@163.com" style={{ fontSize: "9px", color: C.muted, textDecoration: "none", display: "block", wordBreak: "break-all", lineHeight: "1.5" }}>
             ✉ yueyuecheng0702@163.com
-              <div style={{ fontSize: "9px", color: C.muted, marginTop: "12px", borderTop: `1px solid ${C.border}`, paddingTop: "8px" }}>
-  ✺ 访问次数：{views || "---"}
+             {/* 访客计数器 - 自动增长 */}
+<div style={{ marginTop: "15px", padding: "10px 0", borderTop: `1px solid ${C.border}` }}>
+  <div style={{ fontSize: "9px", color: C.accent, letterSpacing: "2px", marginBottom: "8px", textTransform: "uppercase" }}>
+    Stardust Statistics
+  </div>
+  <img 
+    src="https://count.getloli.com/get/@yueyue-odyssey-2026?theme=asoul" 
+    alt="Visitor Count" 
+    style={{ height: "24px", opacity: 0.85, filter: "sepia(0.5) hue-rotate(10deg)" }} 
+  />
+  <div style={{ fontSize: "8px", color: C.muted, marginTop: "4px" }}>
+    总访问人次 · 实时同步中
+  </div>
 </div>
           </a>
         </div>
